@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>تقديم إلى منصب إداري</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: url('bmw.jpg') no-repeat center center fixed;
+      background-size: cover;
+      direction: rtl;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .overlay {
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(4px);
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
+
+    .form-container {
+      position: relative;
+      z-index: 1;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 30px;
+      border-radius: 20px;
+      width: 100%;
+      max-width: 500px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.3);
+    }
+
+    .form-container h2 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    label {
+      font-weight: bold;
+      display: block;
+      margin-top: 10px;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      font-size: 14px;
+    }
+
+    input[type="submit"] {
+      background-color: #28a745;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    input[type="submit"]:hover {
+      background-color: #218838;
+    }
+
+    #status {
+      text-align: center;
+      font-weight: bold;
+      margin-top: 15px;
+    }
+  </style>
+</head>
+<body>
+  <div class="overlay"></div>
+  <div class="form-container">
+    <h2>استمارة تقديم إلى منصب إداري</h2>
+    <form id="adminForm">
+      <label for="name">الاسم الكامل:</label>
+      <input type="text" id="name" name="name" required>
+
+      <label for="age">العمر:</label>
+      <input type="number" id="age" name="age" required>
+
+      <label for="gender">الجنس:</label>
+      <select id="gender" name="gender" required>
+        <option value="">-- اختر --</option>
+        <option value="ذكر">ذكر</option>
+        <option value="أنثى">أنثى</option>
+        <option value="آخر">آخر</option>
+      </select>
+
+      <label for="country">البلد:</label>
+      <input type="text" id="country" name="country" required>
+
+      <label for="reason">لماذا تريد الانضمام إلى الإدارة؟</label>
+      <textarea id="reason" name="reason" rows="3" required></textarea>
+
+      <label for="experience">هل عملت من قبل في دور إداري؟</label>
+      <select id="experience" name="experience" required>
+        <option value="">-- اختر --</option>
+        <option value="نعم">نعم</option>
+        <option value="لا">لا</option>
+      </select>
+
+      <label for="goal">ما هو هدفك من هذا الدور الإداري؟</label>
+      <textarea id="goal" name="goal" rows="3" required></textarea>
+
+      <input type="submit" value="إرسال الطلب">
+    </form>
+    <p id="status"></p>
+  </div>
+
+  <script>
+    const form = document.getElementById('adminForm');
+    const status = document.getElementById('status');
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const name = document.getElementById('name').value;
+      const age = document.getElementById('age').value;
+      const gender = document.getElementById('gender').value;
+      const country = document.getElementById('country').value;
+      const reason = document.getElementById('reason').value;
+      const experience = document.getElementById('experience').value;
+      const goal = document.getElementById('goal').value;
+
+      const content = `<@&1341856291542270024>
+📝 **تقديم جديد لمنصب إداري**
+
+👤 الاسم: ${name}
+🎂 العمر: ${age}
+🚻 الجنس: ${gender}
+🌍 البلد: ${country}
+📌 لماذا يريد الانضمام: ${reason}
+📚 خبرة سابقة: ${experience}
+🎯 الهدف: ${goal}`;
+
+      fetch("https://discord.com/api/webhooks/1382056812248830137/Hl2FncdiQO3TbPslz46Yykffxe9FgdlEgtvv0t1clX9CVCsm4oa3VbGhpKAW_NUt4leu", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ content })
+      })
+      .then(response => {
+        if (response.ok) {
+          status.textContent = "✅ تم إرسال الطلب بنجاح!";
+          status.style.color = "green";
+          form.reset();
+        } else {
+          status.textContent = "❌ حدث خطأ أثناء الإرسال.";
+          status.style.color = "red";
+        }
+      })
+      .catch(error => {
+        status.textContent = "❌ تعذر الاتصال بالويب هوك.";
+        status.style.color = "red";
+        console.error(error);
+      });
+    });
+  </script>
+</body>
+</html>
